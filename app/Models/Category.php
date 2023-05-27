@@ -13,4 +13,18 @@ class Category extends Model
         'name',
         'type',
     ];
+
+    public static $types = [];
+
+    public static function getCategoryTypes()
+    {
+        static::$types = [
+            'expenses' => __('Expenses'),
+            'incomes' => __('Incomes'),
+            'savings' => __('Savings'),
+            'loan' => __('Loan Repayment'),
+        ];
+
+        return static::$types;
+    }
 }

@@ -3,37 +3,37 @@
 namespace App\Http\Livewire;
 
 use App\Models\Category;
-use App\Models\Money;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Validator;
 
 class Dashboard extends Component
 {
-    public Money $money;
+    public Transaction $transaction;
     public array $createCategoryForm = [
         'name' => '',
-        'type' => '',
+        'type' => 'expenses',
     ];
     public bool $showCreateCategoryModal = false;
 
     protected $rules = [
-        'money.amount' => ['required', 'integer'],
-        'money.category_id' => ['required', 'integer'],
+        'transaction.amount' => ['required', 'integer'],
+        'transaction.category_id' => ['required', 'integer'],
     ];
 
     public function mount()
     {
-        $this->money = new Money();
+        $this->transaction = new Transaction();
     }
 
     public function saveTransaction()
     {
         $this->validate();
 
-        $this->money->save();
+        $this->transaction->save();
 
-        $this->money = new Money();
+        $this->transaction = new transaction();
 
         $this->emit('created');
     }

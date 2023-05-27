@@ -60,11 +60,15 @@
         <x-slot name="content">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <x-label for="name" value="{{ __('Category Name') }}" />
-                <x-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="category.name" autofocus />
+                <x-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="createCategoryForm.name" autofocus />
                 <x-input-error for="name" class="mt-2" />
                 <x-label for="name" value="{{ __('Category Type') }}" />
-                <x-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="category.type" autofocus />
-                <x-input-error for="name" class="mt-2" />
+                <select id="type" wire:model="createCategoryForm.type">
+                @foreach (\App\Models\Category::getCategoryTypes() as $value => $title)
+                    <option value="{{$value}}">{{$title}}</option>
+                @endforeach
+                </select>
+                <x-input-error for="type" class="mt-2" />
             </div>
         </x-slot>
 
