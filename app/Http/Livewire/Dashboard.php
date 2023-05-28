@@ -4,6 +4,8 @@ namespace App\Http\Livewire;
 
 use App\Models\Category;
 use App\Models\Transaction;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -14,9 +16,9 @@ class Dashboard extends Component
     public bool $showCreateCategoryModal = false;
 
     protected $rules = [
-        'transaction.amount' => ['required', 'integer'],
+        'transaction.amount' => ['required', 'integer', 'min:1'],
         'transaction.category_id' => ['required', 'integer'],
-        'transaction.is_recurring' => ['nullable', 'boolean'],
+        'transaction.is_recurring' => ['boolean'],
         'transaction.recurring_frequency' => ['nullable', 'integer'],
         'transaction.recurring_on' => ['nullable', 'string'],
     ];
@@ -25,7 +27,7 @@ class Dashboard extends Component
 
     public function mount()
     {
-        $this->transaction = new Transaction();
+        $this->transaction = new Transaction(['is_recurring' => false]);
     }
 
     public function saveTransaction()
@@ -34,7 +36,7 @@ class Dashboard extends Component
 
         $this->transaction->save();
 
-        $this->transaction = new Transaction();
+        $this->transaction = new Transaction(['is_recurring' => false]);
 
         $this->emit('created');
     }
@@ -49,6 +51,19 @@ class Dashboard extends Component
         $this->emit('showCreateCategoryModalUpdated', $showCreateCategoryModal);
     }
 
+    public function getBalanceProperty()
+    {
+        $incomes = Transaction::whereHas('category', function (Builder $query) {
+            $query->where('type', 'incomes');
+        })->where('created_at', '>=', now()->startOfMonth())->sum('amount');
+
+        $expenses = Transaction::whereHas('category', function (Builder $query) {
+            $query->where('type', 'expenses')->orWhere('type', 'loans');
+        })->where('created_at', '>=', now()->startOfMonth())->sum('amount');
+
+        return $incomes - $expenses;
+    }
+
     public function getCategoriesProperty()
     {
         return Category::all();
@@ -56,7 +71,7 @@ class Dashboard extends Component
 
     public function getTransactionsProperty()
     {
-        return Transaction::all();
+        return Transaction::with('category')->where('created_at', '>=', now()->startOfMonth())->get();
     }
 
     public function getUserProperty()

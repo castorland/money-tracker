@@ -23,7 +23,7 @@
             {{-- </div> --}}
             {{-- <div class="col-span-6 sm:col-span-2"> --}}
                 <x-label for="is_recurring" value="{{ __('Recurring?') }}" />
-                <x-checkbox wire:model="transaction.is_recurring" :value="$transaction->is_recurring" />
+                <x-checkbox wire:model="transaction.is_recurring" :value="$transaction->is_recurring ?? false" />
                 <x-input-error for="is_recurring" class="mt-2" />
                 @if($transaction->is_recurring)
                 <x-label for="recurring_frequency" value="{{ __('Recurring Frequency') }}" />
@@ -37,11 +37,11 @@
 
             <!-- Category -->
             <div class="col-span-6 sm:col-span-3">
-                <x-label for="category" value="{{ __('Category') }}" />
+                <x-label for="" value="{{ __('Category') }}" />
                 <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                     @foreach ($this->categories ?? [] as $category)
                     <label class="flex items-center">
-                        <x-checkbox wire:model.defer="transaction.category_id" :value="$category->id" />
+                        <x-radio wire:model="transaction.category_id" :value="$category->id" />
                         <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ $category->name }}</span>
                     </label>
 
@@ -79,9 +79,59 @@
                 </h2>
             </div>
 
-            <p class="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                Laravel has wonderful documentation covering every aspect of the framework. Whether you're new to the framework or have previous experience, we recommend reading all of the documentation from beginning to end.
-            </p>
+            <div class="mt-10 sm:mt-3">
+                <x-action-section class="md:grid-cols-2">
+
+                    <!-- Category List -->
+                    <x-slot name="content">
+                        <div class="space-y-6">
+                            @foreach ($this->transactions as $transaction)
+                            <div class="flex items-center justify-between">
+                                <div class="break-all dark:text-white">
+                                    {{ $transaction->category->name }}
+                                </div>
+
+                                <div class="flex items-center ml-2">
+                                    <div class="text-sm text-gray-400 md:mr-12 sm:mr-4">
+                                        {{ $transaction->created_at->format('Y-m-d') }}
+                                    </div>
+                                    <div class="text-sm text-gray-400 md:mr-12 sm:mr-4">
+                                        {{ \App\Models\Category::getCategoryTypes($transaction->category->type) }}
+                                    </div>
+
+                                    <div class="text-sm text-gray-400 md:mr-12 sm:mr-4">
+                                        {{ $transaction->is_recurring }}
+                                    </div>
+
+                                    <div class="dark:text-white md:mr-12 sm:mr-4 font-semibold">
+                                        {{ $transaction->amount }}
+                                    </div>
+
+                                </div>
+                            </div>
+                            @endforeach
+
+                        </div>
+                    </x-slot>
+                </x-action-section>
+
+                <div class="mt-5 md:mt-0 md:col-span-2">
+                    <div class="px-4 py-5 sm:p-6 bg-green-400 dark:bg-gray-800 shadow sm:rounded-lg">
+                        <div class="space-y-6">
+                            <div class="flex items-center justify-between">
+                                <div class="break-all dark:text-white">
+                                    {{ __('Balance') }}
+                                </div>
+                                <div class="flex items-center ml-2">
+                                    <div class="dark:text-white md:mr-12 sm:mr-4 font-semibold">
+                                        {{ $this->balance }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <p class="mt-4 text-sm">
                 <a href="https://laravel.com/docs" class="inline-flex items-center font-semibold text-indigo-700 dark:text-indigo-300">

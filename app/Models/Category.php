@@ -16,7 +16,7 @@ class Category extends Model
 
     public static $types = [];
 
-    public static function getCategoryTypes()
+    public static function getCategoryTypes($slug = null)
     {
         static::$types = [
             'expenses' => __('Expenses'),
@@ -25,6 +25,9 @@ class Category extends Model
             'loan' => __('Loan Repayment'),
         ];
 
+        if ($slug) {
+            return static::$types[$slug];
+        }
         return static::$types;
     }
 }
