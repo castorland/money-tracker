@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,4 +25,5 @@ Route::middleware([
     'verified'
 ])->group(function () {
     Route::get('/dashboard', [TransactionController::class, 'index'])->name('dashboard');
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 });

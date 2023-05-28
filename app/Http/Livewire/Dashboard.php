@@ -6,21 +6,22 @@ use App\Models\Category;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use Illuminate\Support\Facades\Validator;
 
 class Dashboard extends Component
 {
     public Transaction $transaction;
-    public array $createCategoryForm = [
-        'name' => '',
-        'type' => 'expenses',
-    ];
+
     public bool $showCreateCategoryModal = false;
 
     protected $rules = [
         'transaction.amount' => ['required', 'integer'],
         'transaction.category_id' => ['required', 'integer'],
+        'transaction.is_recurring' => ['nullable', 'boolean'],
+        'transaction.recurring_frequency' => ['nullable', 'integer'],
+        'transaction.recurring_on' => ['nullable', 'string'],
     ];
+
+    protected $listeners = ['categoryCreated'];
 
     public function mount()
     {
@@ -33,28 +34,29 @@ class Dashboard extends Component
 
         $this->transaction->save();
 
-        $this->transaction = new transaction();
+        $this->transaction = new Transaction();
 
         $this->emit('created');
     }
 
-    public function createCategory()
+    public function categoryCreated()
     {
-        $this->resetErrorBag();
-
-        Validator::make([
-            'name' => $this->createCategoryForm['name'],
-        ], [
-            'name' => ['required', 'string', 'max:255'],
-            'type' => ['required', 'string', 'max:255'],
-        ])->validateWithBag('createCategoryForm');
-
-        Category::create($this->createCategoryForm);
-
-        $this->createCategoryForm['name'] = '';
-        $this->createCategoryForm['type'] = '';
-
         $this->emit('created');
+    }
+
+    public function updatedShowCreateCategoryModal($showCreateCategoryModal)
+    {
+        $this->emit('showCreateCategoryModalUpdated', $showCreateCategoryModal);
+    }
+
+    public function getCategoriesProperty()
+    {
+        return Category::all();
+    }
+
+    public function getTransactionsProperty()
+    {
+        return Transaction::all();
     }
 
     public function getUserProperty()
