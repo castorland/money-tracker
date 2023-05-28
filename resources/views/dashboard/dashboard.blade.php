@@ -12,15 +12,16 @@
     </div>
     @endif
 
-    <x-form-section submit="saveTransaction" class="">
+    <x-form-section submit="saveTransaction" class="md:grid-cols-2">
 
         <x-slot name="form">
             <!-- Amount -->
-            <div class="col-span-6 sm:col-span-4">
+            <div class="col-span-6 sm:col-span-3">
                 <x-label for="name" value="{{ __('Amount') }}" />
                 <x-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="transaction.amount" autofocus />
                 <x-input-error for="name" class="mt-2" />
-
+            {{-- </div> --}}
+            {{-- <div class="col-span-6 sm:col-span-2"> --}}
                 <x-label for="is_recurring" value="{{ __('Recurring?') }}" />
                 <x-checkbox wire:model="transaction.is_recurring" :value="$transaction->is_recurring" />
                 <x-input-error for="is_recurring" class="mt-2" />
@@ -35,7 +36,7 @@
             </div>
 
             <!-- Category -->
-            <div class="col-span-6">
+            <div class="col-span-6 sm:col-span-3">
                 <x-label for="category" value="{{ __('Category') }}" />
                 <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                     @foreach ($this->categories ?? [] as $category)
