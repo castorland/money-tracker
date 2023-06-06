@@ -1,11 +1,11 @@
-<div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
+<div class="p-6 bg-white border-b border-gray-200 lg:p-8 dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent dark:border-gray-700">
 
     <div class="flex justify-between mt-8">
         <h1 class="text-2xl font-medium text-gray-900 dark:text-white">
             {{ __('Categories') }}
         </h1>
 
-        <button class="px-4 py-2 font-semibold text-sm bg-sky-500 text-white rounded-none shadow-sm" wire:click.prevent="$set('showCreateCategoryModal', true)" wire:loading.attr="disabled">
+        <button class="px-4 py-2 text-sm font-semibold text-white rounded-none shadow-sm bg-sky-500" wire:click.prevent="$set('showCreateCategoryModal', true)" wire:loading.attr="disabled">
             {{ __('Add new category') }}
         </button>
     </div>
@@ -13,7 +13,7 @@
     <x-validation-errors class="mb-4" />
 
     @if (session('status'))
-    <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
+    <div class="mb-4 text-sm font-medium text-green-600 dark:text-green-400">
         {{ session('status') }}
     </div>
     @endif
@@ -27,7 +27,7 @@
             <!-- Category List -->
             <x-slot name="content">
                 <div class="space-y-6">
-                    @foreach ($this->categories as $category)
+                    @forelse ($this->categories as $category)
                     <div class="flex items-center justify-between">
                         <div class="break-all dark:text-white">
                             {{ $category->name }}
@@ -42,7 +42,13 @@
                             <x-danger-button class="ml-6" wire:click="confirmCategoryDeletion({{ $category->id }})">{{ __('Delete') }}</x-danger-button>
                         </div>
                     </div>
-                    @endforeach
+                    @empty
+                    <div class="flex items-center justify-between">
+                        <div class="break-all dark:text-white">
+                            {{ __('There is no category yet.') }}
+                        </div>
+                    </div>
+                    @endforelse
                 </div>
             </x-slot>
         </x-action-section>
@@ -55,9 +61,9 @@
         </x-slot>
 
         <x-slot name="content">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <x-label for="categoryName" value="{{ __('Category Name') }}" />
-                <x-input id="categoryName" type="text" class="mt-1 block w-full" wire:model.defer="categoryBeingUpdated.name" autofocus />
+                <x-input id="categoryName" type="text" class="block w-full mt-1" wire:model.defer="categoryBeingUpdated.name" autofocus />
                 <x-input-error for="categoryName" class="mt-2" />
                 <x-label for="categoryType" value="{{ __('Category Type') }}" />
                 <select id="categoryType" wire:model="categoryBeingUpdated.type">

@@ -15,9 +15,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('amount')->index();
             $table->unsignedBigInteger('category_id')->index();
+            $table->string('note')->nullable();
+            $table->timestamp('transaction_date')->index();
             $table->boolean('is_recurring')->index();
             $table->unsignedSmallInteger('recurring_frequency')->nullable();
-            $table->string('recurring_on')->nullable();
+            $table->string('recurring_period', 10)->nullable();
+            $table->date('recurring_on')->nullable();
             $table->timestamps();
         });
     }
