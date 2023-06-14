@@ -17,7 +17,9 @@ class Dashboard extends Component
     public bool $showCreateCategoryModal = false;
     public bool $showNewRecurringTransactionConfirmation = false;
     public bool $newRecurringTransactionConfirmed = false;
+    public bool $confirmingRecurringPaymentDeletion = false;
     public $similarTransaction;
+    public $recurringIdBeingDeleted;
 
     protected $rules = [
         'transaction.amount' => ['required', 'integer', 'min:1'],
@@ -91,6 +93,22 @@ class Dashboard extends Component
         ]);
     }
 
+    public function confirmRecurringDeletion($recurringId)
+    {
+        $this->confirmingRecurringPaymentDeletion = true;
+
+        $this->recurringIdBeingDeleted = $recurringId;
+    }
+
+    public function deleteRecurringPayment()
+    {
+        RecurringPayment::where('id', $this->recurringIdBeingDeleted)->first()->delete();
+
+        $this->confirmingRecurringPaymentDeletion = false;
+
+        $this->recurringIdBeingDeleted = null;
+    }
+
     public function categoryCreated()
     {
         $this->emit('created');
@@ -140,7 +158,7 @@ class Dashboard extends Component
 
     public function getTransactionsProperty()
     {
-        return Transaction::with('category')->where('created_at', '>=', now()->startOfMonth())->orderBy('transaction_date', 'ASC')->get();
+        return Transaction::with('category')->orderBy('transaction_date', 'DESC')->latest()->limit(10)->get();
     }
 
     public function getUserProperty()

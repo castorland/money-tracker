@@ -23,7 +23,7 @@ class Category extends Model
             'expenses' => __('Expenses'),
             'incomes' => __('Incomes'),
             'savings' => __('Savings'),
-            'loan' => __('Loan Repayment'),
+            'loans' => __('Loan Repayment'),
         ];
 
         if ($slug) {

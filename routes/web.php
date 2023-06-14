@@ -19,6 +19,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/test', function () {
+    return view('test');
+});
+
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -26,4 +31,5 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', [TransactionController::class, 'index'])->name('dashboard');
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/transactions', [TransactionController::class, 'list'])->name('transactions.index');
 });

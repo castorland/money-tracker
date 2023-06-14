@@ -10,4 +10,9 @@ class TransactionController extends Controller
     {
         return view('dashboard.index');
     }
+
+    public function list()
+    {
+        return view('transaction.index');
+    }
 }
