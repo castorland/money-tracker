@@ -238,7 +238,11 @@
                                             <h6 class="mb-1 font-semibold leading-normal text-slate-700">
                                                 {{ $transaction->transaction->category->name }}</h6>
                                             <span class="text-xs leading-tight">{{ __('Next due') }}:
-                                                {{ $transaction->next_due->format('Y-m-d') }}</span>
+                                                {{ $transaction->next_due->format('Y-m-d') }}
+                                            </span>
+                                            <span class="text-xs leading-tight">
+                                                {{ $transaction->transaction->note }}
+                                            </span>
                                         </div>
 
                                     </div>
