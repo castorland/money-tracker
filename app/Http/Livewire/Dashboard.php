@@ -80,6 +80,7 @@ class Dashboard extends Component
         $recurring = RecurringPayment::find($recurringId);
         $transaction = Transaction::find($recurring->transaction_id);
         $newTransaction = $transaction->replicate();
+        $newTransaction->transaction_date = now();
         $newTransaction->save();
         $dateString = $transaction->recurring_frequency . ' ' . $transaction->recurring_period;
         $interval = \DateInterval::createFromDateString($dateString);
