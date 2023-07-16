@@ -70,6 +70,7 @@
                             </div>
                         </div>
                     @endforelse
+                    {{ $this->transactions->links() }}
                 </div>
             </x-slot>
         </x-action-section>

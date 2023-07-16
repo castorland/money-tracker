@@ -14,7 +14,7 @@ class TransactionList extends Component
 
     public function mount()
     {
-        $this->transactions = Transaction::with('category')->paginate(25);
+        $this->transactions = Transaction::with('category')->latest()->paginate(25);
     }
 
     public function render()
