@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 48 48" xml:space="preserve" {{ $attributes }}>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 48 48" xml:space="preserve" {{ $attributes->merge(["class" => ""]) }}>
   <g>
     <path style="fill:#FEE187;" d="M230,0C102.974,0,0,102.975,0,230c0,98.818,62.319,183.081,149.8,215.631l295.018-297.983   C411.694,61.299,328.006,0,230,0z" />
     <path style="fill:#FFC61B;" d="M460,230c0-29.02-5.389-56.778-15.198-82.347l-50.073-50.006L65.937,361.753l83.867,83.867   C174.776,454.912,201.792,460,230,460C357.025,460,460,357.026,460,230z" />

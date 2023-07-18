@@ -169,7 +169,8 @@ class Dashboard extends Component
 
     public function render()
     {
-        return view('dashboard.dashboard');
+        return view('dashboard.template');
+        // return view('dashboard.dashboard');
     }
 
     private function readyToSaveTransaction(): bool

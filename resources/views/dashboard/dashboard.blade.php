@@ -2,18 +2,12 @@
     class="p-6 bg-white border-b border-gray-200 lg:p-8 dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent dark:border-gray-700">
 
     <h1 class="mt-8 text-2xl font-medium text-gray-900 dark:text-white">
-        {{ __('Add new transaction') }}
+
     </h1>
 
-    <x-validation-errors class="mb-4" />
 
-    {{-- <x-banner /> --}}
 
-    @if (session('status'))
-        <div class="mb-4 text-sm font-medium text-green-600 dark:text-green-400">
-            {{ session('status') }}
-        </div>
-    @endif
+
 
     <x-form-section submit="saveTransaction" class="md:grid-cols-2">
 
@@ -87,6 +81,9 @@
                 </div>
             </div>
             <div class="col-span-6 md:col-span-1">
+                <button
+                    class="inline-block px-8 py-2 mb-0 text-xs font-bold text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-lg shadow-none cursor-pointer leading-pro ease-soft-in bg-150 active:opacity-85 hover:scale-102 tracking-tight-soft bg-x-25 border-fuchsia-500 text-fuchsia-500 hover:opacity-75">View
+                    All</button>
                 <x-primary-button wire:click.prevent="$set('showCreateCategoryModal', true)"
                     wire:loading.attr="disabled">{{ __('Add new category') }}</x-primary-button>
             </div>
@@ -106,11 +103,14 @@
     <!-- Create Category Modal -->
     @livewire('create-category-modal', ['showCreateCategoryModal' => $showCreateCategoryModal])
 
-    <div class="grid grid-cols-1 gap-6 p-6 mt-10 bg-gray-200 bg-opacity-25 dark:bg-gray-800 md:grid-cols-2 lg:gap-8 lg:p-8">
+    <div
+        class="grid grid-cols-1 gap-6 p-6 mt-10 bg-gray-200 bg-opacity-25 dark:bg-gray-800 md:grid-cols-2 lg:gap-8 lg:p-8">
         <div>
             <div class="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6 stroke-gray-400">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0l-3.75-3.75M17.25 21L21 17.25" />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    class="w-6 h-6 stroke-gray-400">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0l-3.75-3.75M17.25 21L21 17.25" />
                 </svg>
 
                 <h2 class="ml-3 text-xl font-semibold text-gray-900 dark:text-white">
@@ -195,7 +195,8 @@
             </div>
 
             <p class="mt-4 text-sm">
-                <a href="{{ route('transactions.index') }}" class="inline-flex items-center font-semibold text-indigo-700 dark:text-indigo-300">
+                <a href="{{ route('transactions.index') }}"
+                    class="inline-flex items-center font-semibold text-indigo-700 dark:text-indigo-300">
                     {{ __('All transactions') }}
 
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
@@ -211,8 +212,10 @@
 
         <div>
             <div class="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6 stroke-gray-400">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    class="w-6 h-6 stroke-gray-400">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
                 </svg>
 
                 <h2 class="ml-3 text-xl font-semibold text-gray-900 dark:text-white">
@@ -253,8 +256,11 @@
                                         </div>
                                         <div class="flex items-center ">
                                             <button wire:click="confirmRecurringDeletion({{ $transaction->id }})">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="flex items-center justify-center w-5 h-5 mb-0 ml-2 text-xs text-red-600 transition-all hover:opacity-75 stroke-red-600">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5"
+                                                    class="flex items-center justify-center w-5 h-5 mb-0 ml-2 text-xs text-red-600 transition-all hover:opacity-75 stroke-red-600">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                                                 </svg>
                                             </button>
                                         </div>
@@ -344,7 +350,8 @@
             </x-slot>
 
             <x-slot name="footer">
-                <x-secondary-button wire:click="$toggle('confirmingRecurringPaymentDeletion')" wire:loading.attr="disabled">
+                <x-secondary-button wire:click="$toggle('confirmingRecurringPaymentDeletion')"
+                    wire:loading.attr="disabled">
                     {{ __('Cancel') }}
                 </x-secondary-button>
 
