@@ -1,107 +1,7 @@
-<div
-    class="p-6 bg-white border-b border-gray-200 lg:p-8 dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent dark:border-gray-700">
-
-    <h1 class="mt-8 text-2xl font-medium text-gray-900 dark:text-white">
-
-    </h1>
-
-
-
-
-
-    <x-form-section submit="saveTransaction" class="md:grid-cols-2">
-
-        <x-slot name="form">
-            <!-- Amount -->
-            <div class="col-span-6 md:col-span-1">
-                <x-label for="name" value="{{ __('Amount') }}" class="font-semibold" />
-                <x-input id="name" type="number" class="block w-full mt-1" wire:model.defer="transaction.amount"
-                    autofocus />
-                <x-input-error for="name" class="mt-2" />
-                {{-- </div> --}}
-                {{-- <div class="col-span-6 sm:col-span-1"> --}}
-                <x-label for="is_recurring" value="{{ __('Recurring?') }}" class="font-semibold" />
-                <x-checkbox wire:model="transaction.is_recurring" :value="$transaction->is_recurring ?? false" />
-                <x-input-error for="is_recurring" class="mt-2" />
-            </div>
-            <div class="col-span-6 md:col-span-1">
-                <x-label for="transaction_date" value="{{ __('Transaction Date') }}" class="font-semibold" />
-                <x-input id="transaction_date" type="date" class="block w-full mt-1"
-                    wire:model.defer="transaction.transaction_date" />
-                <x-input-error for="transaction_date" class="mt-2" />
-            </div>
-            <div class="col-span-6 md:col-span-1">
-                <x-label for="note" value="{{ __('Note') }}" class="font-semibold" />
-                <x-input id="note" type="text" class="block w-full mt-1" wire:model.defer="transaction.note" />
-                <x-input-error for="note" class="mt-2" />
-            </div>
-            <div class="col-span-6 md:col-span-2">
-                @if ($transaction->is_recurring)
-                    <x-label for="recurring_frequency" value="{{ __('Recurring') }}" class="font-semibold" />
-                    <div class="flex content-between mt-1">
-                        <select class="w-2/5 " wire:model.defer="transaction.recurring_frequency">
-                            <option>{{ __('Choose frequency') }}</option>
-                            @foreach (range(1, 30) as $number)
-                                <option value="{{ $number }}">{{ $number }}</option>
-                            @endforeach
-                        </select>
-                        <x-input-error for="recurring_frequency" class="mt-2" />
-                        <select class="w-3/5 " wire:model.defer="transaction.recurring_period">
-                            <option>{{ __('Choose period') }}</option>
-                            <option value="day">{{ __('Day') }}</option>
-                            <option value="week">{{ __('Week') }}</option>
-                            <option value="month">{{ __('Month') }}</option>
-                            <option value="year">{{ __('Year') }}</option>
-                        </select>
-                        <x-input-error for="recurring_period" class="mt-2" />
-                    </div>
-                    <x-label for="recurring_on" value="{{ __('Recurring on') }}" class="font-semibold" />
-                    <x-input id="recurring_on" type="date" class="block w-full mt-1"
-                        wire:model.defer="transaction.recurring_on" autofocus />
-                    <x-input-error for="recurring_on" class="mt-2" />
-                @endif
-            </div>
-
-            <!-- Category -->
-            <div class="col-span-6 md:col-span-5">
-                <x-label for="" value="{{ __('Category') }}" class="font-semibold" />
-                <div class="grid grid-cols-2 gap-4 mt-2 md:grid-cols-3">
-                    @forelse ($this->categories ?? [] as $category)
-                        <label class="flex items-center">
-                            <x-radio wire:model="transaction.category_id" :value="$category->id" />
-                            <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ $category->name }}</span>
-                        </label>
-                    @empty
-                        <div class="flex items-center justify-between">
-                            <div class="break-all dark:text-white">
-                                {{ __('There is no category yet.') }}
-                            </div>
-                        </div>
-                    @endforelse
-                </div>
-            </div>
-            <div class="col-span-6 md:col-span-1">
-                <button
-                    class="inline-block px-8 py-2 mb-0 text-xs font-bold text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-lg shadow-none cursor-pointer leading-pro ease-soft-in bg-150 active:opacity-85 hover:scale-102 tracking-tight-soft bg-x-25 border-fuchsia-500 text-fuchsia-500 hover:opacity-75">View
-                    All</button>
-                <x-primary-button wire:click.prevent="$set('showCreateCategoryModal', true)"
-                    wire:loading.attr="disabled">{{ __('Add new category') }}</x-primary-button>
-            </div>
-        </x-slot>
-
-        <x-slot name="actions">
-            <x-action-message class="mr-3" on="created">
-                {{ __('Created.') }}
-            </x-action-message>
-
-            <x-button>
-                {{ __('Save') }}
-            </x-button>
-        </x-slot>
-    </x-form-section>
-
+<div>
+    @livewire('transaction.add-transaction')
     <!-- Create Category Modal -->
-    @livewire('create-category-modal', ['showCreateCategoryModal' => $showCreateCategoryModal])
+    @livewire('create-category-modal')
 
     <div
         class="grid grid-cols-1 gap-6 p-6 mt-10 bg-gray-200 bg-opacity-25 dark:bg-gray-800 md:grid-cols-2 lg:gap-8 lg:p-8">
@@ -313,32 +213,6 @@
             </p>
         </div>
 
-
-        <!-- Similar Transaction Confirmation Modal -->
-        <x-confirmation-modal wire:model="showNewRecurringTransactionConfirmation">
-            <x-slot name="title">
-                {{ __('Similar Transaction Found') }}
-            </x-slot>
-
-            <x-slot name="content">
-                {{ __('A transaction with same details saved at ') }}
-                {{ $similarTransaction?->created_at->format('Y-m-d') }}.
-                <br>
-                {{ __('Are you sure you would like to save this transaction?') }}
-            </x-slot>
-
-            <x-slot name="footer">
-                <x-secondary-button wire:click="$toggle('showNewRecurringTransactionConfirmation')"
-                    wire:loading.attr="disabled">
-                    {{ __('Cancel') }}
-                </x-secondary-button>
-
-                <x-danger-button class="ml-3" wire:click="saveTransaction(true)" wire:loading.attr="disabled">
-                    {{ __('Save') }}
-                </x-danger-button>
-            </x-slot>
-        </x-confirmation-modal>
-
         <!-- Delete Recurring Payment Confirmation Modal -->
         <x-confirmation-modal wire:model="confirmingRecurringPaymentDeletion">
             <x-slot name="title">
@@ -361,3 +235,4 @@
             </x-slot>
         </x-confirmation-modal>
     </div>
+</div>
